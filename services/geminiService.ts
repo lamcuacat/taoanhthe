@@ -139,6 +139,12 @@ Trước khi xuất kết quả cuối cùng, hãy tự trả lời câu hỏi: 
 
   } catch (error) {
     console.error("Error generating passport photos:", error);
+    const errorMessage = error instanceof Error ? error.message.toLowerCase() : String(error).toLowerCase();
+    
+    if (errorMessage.includes('429') || errorMessage.includes('quota') || errorMessage.includes('resource_exhausted')) {
+        throw new Error("API Key miễn phí hiện không được cấp hạn mức sử dụng (Quota = 0) cho mô hình AI tạo ảnh này. Bạn cần thiết lập thanh toán (Set up billing) trong Google AI Studio cho dự án chứa API Key đó.");
+    }
+    
     throw new Error("Không thể tạo ảnh bằng AI. Vui lòng kiểm tra khóa API và kết nối mạng của bạn.");
   }
 };
@@ -204,6 +210,12 @@ Thực hiện yêu cầu chỉnh sửa sau đây: "${prompt}".
 
   } catch (error) {
     console.error("Error refining passport photo:", error);
+    const errorMessage = error instanceof Error ? error.message.toLowerCase() : String(error).toLowerCase();
+    
+    if (errorMessage.includes('429') || errorMessage.includes('quota') || errorMessage.includes('resource_exhausted')) {
+        throw new Error("API Key miễn phí hiện không được cấp hạn mức sử dụng (Quota = 0) cho mô hình AI tạo ảnh. Bạn cần thiết lập thanh toán (Set up billing) trong Google AI Studio.");
+    }
+
     throw new Error("Failed to refine photo with AI. Please try again.");
   }
 };

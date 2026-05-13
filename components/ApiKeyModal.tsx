@@ -24,7 +24,7 @@ export default function ApiKeyModal({ isOpen, onClose }: { isOpen: boolean, onCl
       <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden flex flex-col mx-4 animate-in fade-in zoom-in-95 duration-200">
         <div className="p-5 border-b border-slate-100 flex items-center justify-between bg-white">
           <h2 className="text-xl font-bold flex items-center gap-2 text-slate-800">
-            <Key className="text-indigo-600 w-6 h-6" /> Nạp Khóa API (Miễn phí)
+            <Key className="text-indigo-600 w-6 h-6" /> Nạp Khóa API
           </h2>
           <button onClick={onClose} className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-xl transition-colors">
             <X className="w-6 h-6" />
@@ -32,16 +32,19 @@ export default function ApiKeyModal({ isOpen, onClose }: { isOpen: boolean, onCl
         </div>
         <div className="p-6 space-y-5 text-sm text-slate-600 bg-slate-50/50">
           <p className="text-base text-slate-700 leading-relaxed">
-            Hệ thống cần <strong>Gemini API Key</strong> để cho phép công cụ AI xử lý ảnh của bạn. Khóa này hoàn toàn miễn phí và <strong>chỉ được lưu trữ an toàn trên trình duyệt của bạn</strong>, không gửi đến máy chủ của chúng tôi.
+            Hệ thống cần <strong>Gemini API Key</strong> để cho phép công cụ AI xử lý ảnh của bạn. Khóa API này <strong>chỉ được lưu trữ an toàn trên trình duyệt của bạn</strong>, không gửi đến máy chủ của chúng tôi.
           </p>
           
           <div className="bg-white p-5 rounded-2xl border border-indigo-100 shadow-sm space-y-3">
-            <h3 className="font-bold text-indigo-900 text-base">📘 Hướng dẫn lấy khóa miễn phí (1 phút):</h3>
+            <h3 className="font-bold text-indigo-900 text-base">📘 Hướng dẫn lấy khóa API (1 phút):</h3>
+            <div className="p-3 bg-amber-50 border border-amber-200 text-amber-800 rounded-lg text-sm mb-3">
+              <strong>Lưu ý quan trọng:</strong> Vì chức năng tạo ảnh sử dụng mô hình đặc biệt, mức sử dụng miễn phí (Free Tier) hiện tại bằng 0. Bạn cần phải chọn "Set up billing" (thiết lập thanh toán thẻ) khi tạo/chọn khóa API mới có thể sử dụng (bạn chưa bị trừ tiền ngay lập tức mà chỉ để mở khóa hạn mức).
+            </div>
             <ol className="list-decimal ml-5 space-y-2.5 text-slate-700">
               <li>Truy cập trang web <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noreferrer" className="font-semibold text-indigo-600 hover:text-indigo-800 hover:underline gap-1 inline-flex items-center">Google AI Studio <ExternalLink className="w-3.5 h-3.5"/></a></li>
               <li>Đăng nhập bằng tài khoản Google của bạn</li>
               <li>Nhấn nút màu xanh <strong>"Create API key"</strong></li>
-              <li>Chọn <strong>"Create API key in new project"</strong></li>
+              <li>Chọn dự án của bạn và đảm bảo bạn <strong>đã chọn "Set up billing"</strong> để thiết lập thanh toán</li>
               <li>Nhấn <strong>"Copy"</strong> đoạn mã vừa tạo <br/><span className="text-xs text-slate-400">(Thường bắt đầu bằng <code>AIzaSy...</code>)</span></li>
             </ol>
           </div>
