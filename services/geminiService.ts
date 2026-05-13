@@ -1,8 +1,21 @@
 import { GoogleGenAI, Modality, Part } from "@google/genai";
 
-// Fix: Initialize the GoogleGenAI client.
-// According to guidelines, the API key must be from process.env.API_KEY and we can assume it is set.
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY! });
+// Fix: Initialize the GoogleGenAI client lazily.
+let aiClient: GoogleGenAI | null = null;
+function getAi(): GoogleGenAI {
+    if (!aiClient) {
+        // @ts-ignore
+        const key = process.env.API_KEY || process.env.GEMINI_API_KEY || (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_GEMINI_API_KEY);
+        if (!key) {
+            console.error("Thiếu API Key cho Gemini. Vui lòng thêm biến môi trường GEMINI_API_KEY hoặc VITE_GEMINI_API_KEY.");
+            // We initialize it with a dummy string so it doesn't immediately crash, but requests will fail.
+            aiClient = new GoogleGenAI({ apiKey: "MISSING_KEY" });
+        } else {
+            aiClient = new GoogleGenAI({ apiKey: key });
+        }
+    }
+    return aiClient;
+}
 
 interface GeneratedImage {
   base64: string;
@@ -78,6 +91,7 @@ Trước khi xuất kết quả cuối cùng, hãy tự trả lời câu hỏi: 
 
 **ĐỊNH DẠNG ĐẦU RA:** Trả về một hình ảnh duy nhất với tỷ lệ khung hình chính xác là ${aspectRatio}. Chỉ trả về hình ảnh. Không có văn bản.`;
 
+    const ai = getAi();
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash-image',
       contents: { parts: [{ text: fullPrompt }, imagePart] },
@@ -147,6 +161,7 @@ Thực hiện yêu cầu chỉnh sửa sau đây: "${prompt}".
 **ĐỊNH DẠNG ĐẦU RA:** Chỉ trả về hình ảnh. Không có văn bản.`,
     };
 
+    const ai = getAi();
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash-image', 
       contents: {
