@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import Header from './components/Header';
 import ImageUploader from './components/ImageUploader';
 import ResultDisplay from './components/ResultDisplay';
@@ -8,6 +8,7 @@ import GenerationOptions from './components/GenerationOptions';
 import { MagicIcon } from './components/icons/MagicIcon';
 import RequirementsList from './components/RequirementsList';
 import SourceImageViewer from './components/SourceImageViewer';
+import ApiKeyModal from './components/ApiKeyModal';
 
 const App: React.FC = () => {
   const [sourceImage, setSourceImage] = useState<string | null>(null);
@@ -40,6 +41,14 @@ const App: React.FC = () => {
   const [removeGlare, setRemoveGlare] = useState<boolean>(true);
   const [aspectRatio, setAspectRatio] = useState<string>('4x6');
   const [autoZoom, setAutoZoom] = useState<boolean>(true);
+  
+  const [isApiModalOpen, setIsApiModalOpen] = useState(false);
+
+  useEffect(() => {
+    const handleOpenModal = () => setIsApiModalOpen(true);
+    window.addEventListener('open-api-key-modal', handleOpenModal);
+    return () => window.removeEventListener('open-api-key-modal', handleOpenModal);
+  }, []);
 
   const handleAttireChange = (update: Partial<{ type: string; color: string; }>) => {
     setAttire(prev => ({ ...prev, ...update }));
@@ -311,6 +320,8 @@ const App: React.FC = () => {
         <p className="font-medium text-slate-400">&copy; {new Date().getFullYear()} ProID AI Studio. All rights reserved.</p>
         <p className="text-xs text-slate-400 mt-1">Hệ thống xử lý ảnh thông minh tự động</p>
       </footer>
+      
+      <ApiKeyModal isOpen={isApiModalOpen} onClose={() => setIsApiModalOpen(false)} />
     </div>
   );
 };

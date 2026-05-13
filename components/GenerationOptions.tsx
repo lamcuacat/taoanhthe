@@ -211,7 +211,7 @@ const GenerationOptions: React.FC<GenerationOptionsProps> = (props) => {
                                 key={color.name}
                                 type="button"
                                 onClick={() => onBackgroundToneChange(color.name)}
-                                className={`w-9 h-9 rounded-full border-2 transition-all flex items-center justify-center ${backgroundTone === color.name ? 'border-indigo-600 ring-2 ring-offset-1 ring-indigo-500' : 'border-gray-300 hover:border-gray-400'}`}
+                                className={`w-10 h-10 sm:w-11 sm:h-11 rounded-full border-2 transition-all flex items-center justify-center ${backgroundTone === color.name ? 'border-indigo-600 ring-2 ring-offset-1 ring-indigo-500' : 'border-gray-300 hover:border-gray-400'}`}
                                 style={{ backgroundColor: color.hex }}
                                 aria-label={`Chọn màu ${color.name}`}
                             >
@@ -273,7 +273,7 @@ const GenerationOptions: React.FC<GenerationOptionsProps> = (props) => {
                                         key={color.name}
                                         type="button"
                                         onClick={() => onAttireChange({ color: color.name })}
-                                        className={`w-9 h-9 rounded-full border-2 transition-all ${attire.color === color.name ? 'border-indigo-600 ring-2 ring-offset-1 ring-indigo-500' : 'border-gray-300 hover:border-gray-400'}`}
+                                        className={`w-10 h-10 sm:w-11 sm:h-11 rounded-full border-2 transition-all ${attire.color === color.name ? 'border-indigo-600 ring-2 ring-offset-1 ring-indigo-500' : 'border-gray-300 hover:border-gray-400'}`}
                                         style={{ backgroundColor: color.hex }}
                                         aria-label={`Chọn màu ${color.name}`}
                                     >

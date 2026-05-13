@@ -1,5 +1,5 @@
 import React from 'react';
-import { Download, Sparkles, Wand2, Image as ImageIcon } from 'lucide-react';
+import { Download, Sparkles, Wand2, Image as ImageIcon, Key } from 'lucide-react';
 import ImageComparator from './ImageComparator';
 import ProgressBar from './ProgressBar';
 
@@ -82,7 +82,23 @@ const ResultDisplay: React.FC<ResultDisplayProps> = (props) => {
     const { generatedImages, isLoading, error, selectedImage, sourceImage, generationProgress, generationStatus } = props;
 
   if (error) {
-    return <div className="text-red-600 bg-red-50 border border-red-100 p-4 rounded-xl w-full text-center text-sm font-medium">{error}</div>;
+    const isApiError = error.toLowerCase().includes('api');
+    return (
+      <div className="flex flex-col items-center justify-center bg-red-50 border border-red-100 rounded-xl p-6 text-center shadow-sm w-full">
+        <p className="text-red-700 text-sm font-medium mb-3">{error}</p>
+        {isApiError && (
+          <button
+            onClick={() => {
+              window.dispatchEvent(new CustomEvent('open-api-key-modal'));
+            }}
+            className="mt-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors shadow-sm text-sm flex items-center gap-2"
+          >
+            <Key className="w-4 h-4" />
+            Nạp Khóa API Gemini
+          </button>
+        )}
+      </div>
+    );
   }
   
   if (isLoading) {

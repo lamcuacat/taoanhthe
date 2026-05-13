@@ -1,20 +1,36 @@
 import { GoogleGenAI, Modality, Part } from "@google/genai";
 
-// Fix: Initialize the GoogleGenAI client lazily.
-let aiClient: GoogleGenAI | null = null;
 function getAi(): GoogleGenAI {
-    if (!aiClient) {
-        // @ts-ignore
-        const key = process.env.API_KEY || process.env.GEMINI_API_KEY || (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_GEMINI_API_KEY);
-        if (!key) {
-            console.error("Thiếu API Key cho Gemini. Vui lòng thêm biến môi trường GEMINI_API_KEY hoặc VITE_GEMINI_API_KEY.");
-            // We initialize it with a dummy string so it doesn't immediately crash, but requests will fail.
-            aiClient = new GoogleGenAI({ apiKey: "MISSING_KEY" });
-        } else {
-            aiClient = new GoogleGenAI({ apiKey: key });
+    let key = "";
+    
+    // Prioritize localStorage key if available
+    if (typeof window !== 'undefined') {
+        const localKey = localStorage.getItem('gemini_api_key');
+        if (localKey && localKey.trim().length > 0) {
+            key = localKey.trim();
         }
     }
-    return aiClient;
+
+    // Dynamically access so Vite doesn't statically replace it
+    if (!key && typeof window !== 'undefined' && (window as any).process?.env?.API_KEY) {
+        key = (window as any).process.env.API_KEY;
+    } else if (!key && typeof process !== 'undefined' && process.env && process.env.API_KEY) {
+        key = process.env.API_KEY;
+    } else if (!key && typeof process !== 'undefined' && process.env && process.env.GEMINI_API_KEY) {
+        key = process.env.GEMINI_API_KEY;
+    }
+    
+    // Also fallback to Vite's import.meta.env
+    if (!key && typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_GEMINI_API_KEY) {
+        key = import.meta.env.VITE_GEMINI_API_KEY;
+    }
+
+    if (!key || key === "undefined") {
+        console.error("Thiếu API Key cho Gemini. Vui lòng thêm biến môi trường GEMINI_API_KEY hoặc VITE_GEMINI_API_KEY.");
+        // Throwing explicitly here can help the UI show a sensible error faster.
+        return new GoogleGenAI({ apiKey: "MISSING_KEY" });
+    }
+    return new GoogleGenAI({ apiKey: key });
 }
 
 interface GeneratedImage {
